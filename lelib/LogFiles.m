@@ -15,7 +15,7 @@
 
 @implementation LogFiles
 
-+ (NSString*)cachesDirectory
++ (NSString*)cachesDirectory __deprecated_msg("Deprecated, use documentDirectory instead. PO Task: https://app.asana.com/0/964428924648258/1110953653162161")
 {
     NSArray* directories = [[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask];
     
@@ -28,9 +28,23 @@
     return [cachesDirectory path];
 }
 
++ (NSString *)documentDirectory
+{
+    NSArray* directories = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                                  inDomains:NSUserDomainMask];
+    
+    if (![directories count]) {
+        LE_DEBUG(@"Could not find document directory.");
+        return nil;
+    }
+    
+    NSURL* documentDirectory = directories[0];
+    return [documentDirectory path];
+}
+
 + (NSString*)logsDirectory
 {
-    return [[self cachesDirectory] stringByAppendingFormat:@"/%@", CACHES_DIRECTORY_BASENAME];
+    return [[self documentDirectory] stringByAppendingFormat:@"/%@", CACHES_DIRECTORY_BASENAME];
 }
 
 - (LogFile*)fileToWrite
