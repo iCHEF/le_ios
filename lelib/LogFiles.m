@@ -13,6 +13,8 @@
 
 #define CACHES_DIRECTORY_BASENAME       @"logentries"
 
+static NSString *_logsDirectory;
+
 @implementation LogFiles
 
 + (NSString*)cachesDirectory __deprecated_msg("Deprecated, use documentDirectory instead. PO Task: https://app.asana.com/0/964428924648258/1110953653162161")
@@ -42,9 +44,31 @@
     return [documentDirectory path];
 }
 
++ (NSString *)applicationSupportDirectory
+{
+    NSArray* directories = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
+                                                                  inDomains:NSUserDomainMask];
+    
+    if (![directories count]) {
+        LE_DEBUG(@"Could not find application support directory.");
+        return nil;
+    }
+    
+    NSURL* applicationSupportDirectory = directories[0];
+    return [applicationSupportDirectory path];
+}
+
 + (NSString*)logsDirectory
 {
-    return [[self documentDirectory] stringByAppendingFormat:@"/%@", CACHES_DIRECTORY_BASENAME];
+    if (_logsDirectory == nil) {
+        _logsDirectory = [[self applicationSupportDirectory] stringByAppendingFormat:@"/%@", CACHES_DIRECTORY_BASENAME];
+    }
+    return _logsDirectory;
+}
+
++ (void)setLogsDirectory:(NSString *)path
+{
+    _logsDirectory = path;
 }
 
 - (LogFile*)fileToWrite

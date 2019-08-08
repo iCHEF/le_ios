@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSMutableArray* logFiles;
 
 + (NSString*)logsDirectory;
++ (void)setLogsDirectory:(NSString*)path;
 
 /*
  Check all files, remove files which are obsolete and rename valid files.
