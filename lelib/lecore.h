@@ -14,7 +14,7 @@
 #define TOKEN_LENGTH                    36
 #define MAXIMUM_LOGENTRY_SIZE           8192
 
-#define MAXIMUM_FILE_COUNT              3
+#define MAXIMUM_FILE_COUNT              100
 #define MAXIMUM_LOGFILE_SIZE            (1024 * 1024)
 
 extern void LE_DEBUG(NSString *format, ...);
